@@ -7,12 +7,14 @@
     android:padding="8dp"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@drawable/rounded_background"
     android:minWidth="48dp"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    >
 
     <TextView
-        android:id="@+id/txtDayOfWeek"
+        android:id="@+id/textDayNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="14sp"
@@ -20,7 +22,7 @@
         android:textColor="@android:color/black"/>
 
     <TextView
-        android:id="@+id/txtDay"
+        android:id="@+id/textDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"

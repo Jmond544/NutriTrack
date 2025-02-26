@@ -4,42 +4,49 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nutritrack.R
 
 class CalendarAdapter(
-    private val days: List<CalendarItem>,
-    private val onItemClick: (Int) -> Unit
-) : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
+    private val days: MutableList<CalendarItem>, // Cambiamos a MutableList para modificarlo
+    private val onDaySelected: (Int) -> Unit
+) : RecyclerView.Adapter<CalendarAdapter.DayViewHolder>() {
 
-    inner class CalendarViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        private val txtDay: TextView = view.findViewById(R.id.txtDay)
-        private val txtDayOfWeek: TextView = view.findViewById(R.id.txtDayOfWeek)
+    inner class DayViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        private val textDay: TextView = view.findViewById(R.id.textDay)
+        private val textDayNumber: TextView = view.findViewById(R.id.textDayNumber)
 
-        fun bind(dayItem: CalendarItem, position: Int) {
-            txtDay.text = dayItem.day.toString()
-            txtDayOfWeek.text = dayItem.dayOfWeek
-            itemView.isSelected = dayItem.isSelected
+        fun bind(item: CalendarItem, position: Int) {
+            textDay.text = item.dayOfWeek
+            textDayNumber.text = item.day.toString()
 
-            itemView.setBackgroundResource(
-                if (dayItem.isSelected) android.R.color.holo_orange_light
-                else android.R.color.transparent
-            )
+            // Cambiar color si está seleccionado
+            val backgroundColor = if (item.isSelected) {
+                ContextCompat.getColor(itemView.context, R.color.selected_day)
+            } else {
+                ContextCompat.getColor(itemView.context, android.R.color.transparent)
+            }
+
+            itemView.setBackgroundColor(backgroundColor)
 
             itemView.setOnClickListener {
-                onItemClick(position)
+                onDaySelected(position)
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DayViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_day, parent, false)
-        return CalendarViewHolder(view)
+        return DayViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
         holder.bind(days[position], position)
     }
 
     override fun getItemCount() = days.size
+
+    // Nueva función para obtener la lista de días
+    fun getDays(): MutableList<CalendarItem> = days
 }
