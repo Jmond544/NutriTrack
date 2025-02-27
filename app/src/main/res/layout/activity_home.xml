@@ -6,11 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".ui.HomeActivity">
 
+    <!-- ViewPager2 para la navegación entre semanas -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerWeeks"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:overScrollMode="never"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textSelectedDate"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    <!-- TextView para mostrar el mes y año -->
+    <TextView
+        android:id="@+id/textMonthYear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Mes y Año"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- TextView para mostrar el día seleccionado -->
+    <TextView
+        android:id="@+id/textSelectedDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fecha seleccionada: "
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/textMonthYear"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
