@@ -14,4 +14,7 @@ interface UsuarioApi {
 
     @POST("usuarios")
     fun crearUsuario(@Body usuario: Usuario): Call<LoginResponse>
+
+    @GET("usuarios/verify-token")
+    fun verificarToken(): Call<LoginResponse>
 }

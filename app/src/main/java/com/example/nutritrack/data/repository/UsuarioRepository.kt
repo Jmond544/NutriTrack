@@ -50,4 +50,22 @@ class UsuarioRepository {
             }
         })
     }
+    fun verificarToken(callback: (Boolean) -> Unit) {
+        usuarioApi.verificarToken().enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "Token válido")
+                    callback(true) // El token es válido
+                } else {
+                    Log.e(TAG, "Token inválido: Código ${response.code()}")
+                    callback(false) // El token no es válido
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                Log.e(TAG, "Error al verificar token: ${t.message}", t)
+                callback(false) // Error de red o servidor
+            }
+        })
+    }
 }

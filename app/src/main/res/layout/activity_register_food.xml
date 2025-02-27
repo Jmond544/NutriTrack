@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@android:color/white" android:padding="0dp">
+    <!--  Encabezado  -->
+    <TextView android:id="@+id/tvTitulo" android:layout_width="match_parent" android:layout_height="88dp" android:background="@color/custom_pink" android:gravity="center" android:minHeight="60dp" android:padding="16dp" android:text="Registra tu Comida" android:textColor="@android:color/white" android:textSize="20sp" android:textStyle="bold"/>
+    <!--  Contenedor para los elementos debajo del encabezado  -->
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
+        <!--  Tipo de comida  -->
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Tipo de comida" android:layout_marginBottom="12dp">
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView android:id="@+id/spTipoComida" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="56dp" android:paddingHorizontal="12dp" android:inputType="none"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <!--  Seleccionar alimento  -->
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Seleccionar Alimento" android:layout_marginBottom="12dp">
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView android:id="@+id/spAlimento" android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="56dp" android:paddingHorizontal="12dp" android:inputType="none"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <!--  Texto de sugerencia  -->
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:layout_marginBottom="8dp" android:gravity="center_vertical" android:orientation="horizontal">
+            <!--  Texto de sugerencia  -->
+            <!--  Botón Ingresar personalizado  -->
+            <TextView android:id="@+id/tvSugerencia" android:layout_width="177dp" android:layout_height="wrap_content" android:layout_marginEnd="8dp" android:text="¿No encuentras tu alimento?" android:textColor="@android:color/black" android:textSize="14sp" android:paddingLeft="10dp"/>
+            <Button android:id="@+id/btnPersonalizado" android:layout_width="wrap_content" android:layout_height="80dp" android:backgroundTint="@color/selected_day" android:text="Ingresar uno personalizado aquí" android:textColor="@android:color/black" android:textSize="14sp"/>
+        </LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Cantidad" android:layout_marginTop="16dp">
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etCantidad" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="number"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <!--  Campo Fecha  -->
+        <com.google.android.material.textfield.TextInputLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="Fecha" android:layout_marginTop="16dp">
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/etFecha" android:layout_width="match_parent" android:layout_height="wrap_content" android:inputType="date"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <!--  Botón Registrar  -->
+        <Button android:id="@+id/btnRegistrar" android:layout_width="match_parent" android:layout_height="55dp" android:text="REGISTRAR" android:textAllCaps="true" android:backgroundTint="@android:color/darker_gray" android:textColor="@android:color/white" android:textStyle="bold" android:layout_marginTop="24dp" android:minHeight="75dp"/>
+    </LinearLayout>
+</LinearLayout>
