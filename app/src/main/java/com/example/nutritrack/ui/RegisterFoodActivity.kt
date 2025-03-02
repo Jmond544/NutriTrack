@@ -23,6 +23,11 @@ class RegisterFoodActivity : AppCompatActivity() {
     private lateinit var btnRegistrar: Button
     private val comidaRepository = ComidaRepository()
 
+    override fun onResume() {
+        super.onResume()
+        setupSpinners() // Volver a cargar los alimentos cada vez que regrese a la actividad
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_food)
@@ -75,7 +80,10 @@ class RegisterFoodActivity : AppCompatActivity() {
         etFecha.setOnClickListener { showDatePicker() }
 
         // Evento de clic en el botón Registrar
-        btnRegistrar.setOnClickListener { registrarComida() }
+        btnRegistrar.setOnClickListener {
+            registrarComida()
+            finish()
+        }
 
         // Evento para ingresar un alimento personalizado
         btnPersonalizado.setOnClickListener {
@@ -106,7 +114,7 @@ class RegisterFoodActivity : AppCompatActivity() {
         val datePicker = DatePickerDialog(
             this,
             { _, year, month, dayOfMonth ->
-                val selectedDate = String.format("%02d-%02d-%04d", dayOfMonth, month + 1, year)
+                val selectedDate = String.format("%04d-%02d-%02d",  year, month + 1,dayOfMonth)
                 etFecha.setText(selectedDate)
             },
             calendar.get(Calendar.YEAR),

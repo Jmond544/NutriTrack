@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Switch
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.nutritrack.R
+import com.example.nutritrack.data.model.AlimentoPersonalizadoRequest
+import com.example.nutritrack.data.model.AlimentoPersonalizadoResponse
+import com.example.nutritrack.data.repository.AlimentoRepository
 import com.google.android.material.textfield.TextInputEditText
 
 class RegisterAlimentActivity : AppCompatActivity() {
-    // Campos de texto (TextInputEditText dentro de TextInputLayout)
+
+    // Campos de texto
     private lateinit var etNombre: TextInputEditText
     private lateinit var etCalorias: TextInputEditText
     private lateinit var etProteinas: TextInputEditText
@@ -24,8 +25,12 @@ class RegisterAlimentActivity : AppCompatActivity() {
     private lateinit var swAlmuerzo: Switch
     private lateinit var swCena: Switch
 
-    // Botón para registrar
+    // Botón
     private lateinit var btnRegistrar: Button
+
+    // Repositorio
+    private val alimentoRepository = AlimentoRepository()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_aliment)
@@ -43,57 +48,43 @@ class RegisterAlimentActivity : AppCompatActivity() {
 
         btnRegistrar = findViewById(R.id.btnRegistrar)
 
-        // Acción del botón Registrar
+        // Acción del botón
         btnRegistrar.setOnClickListener { registrarAlimento() }
     }
 
     private fun registrarAlimento() {
-        // Obtener y limpiar espacios de cada campo
         val nombre = etNombre.text?.toString()?.trim() ?: ""
-        val caloriasText = etCalorias.text?.toString()?.trim() ?: ""
-        val proteinasText = etProteinas.text?.toString()?.trim() ?: ""
-        val carbohidratosText = etCarbohidratos.text?.toString()?.trim() ?: ""
-        val grasasText = etGrasas.text?.toString()?.trim() ?: ""
+        val calorias = etCalorias.text?.toString()?.toIntOrNull()
+        val proteinas = etProteinas.text?.toString()?.toIntOrNull()
+        val carbohidratos = etCarbohidratos.text?.toString()?.toIntOrNull()
+        val grasas = etGrasas.text?.toString()?.toIntOrNull()
 
-        // Validar que ningún campo esté vacío
-        if (nombre.isEmpty() || caloriasText.isEmpty() || proteinasText.isEmpty() ||
-            carbohidratosText.isEmpty() || grasasText.isEmpty()
-        ) {
-            Toast.makeText(this, "Por favor, completa todos los campos", Toast.LENGTH_SHORT).show()
+        if (nombre.isEmpty() || calorias == null || proteinas == null || carbohidratos == null || grasas == null) {
+            Toast.makeText(this, "Completa todos los campos correctamente", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // Convertir los textos a números
-        val calorias = caloriasText.toIntOrNull()
-        val proteinas = proteinasText.toIntOrNull()
-        val carbohidratos = carbohidratosText.toIntOrNull()
-        val grasas = grasasText.toIntOrNull()
+        val request = AlimentoPersonalizadoRequest(
+            incluirEnDesayuno = swDesayuno.isChecked,
+            incluirEnAlmuerzo = swAlmuerzo.isChecked,
+            incluirEnCena = swCena.isChecked,
+            nombre = nombre,
+            caloriasPorPorcion = calorias,
+            proteinaPorPorcion = proteinas,
+            carbohidratosPorPorcion = carbohidratos,
+            grasaPorPorcion = grasas,
+            unidadPorcion = "gramos" // Puedes ajustar la unidad según lo que necesites
+        )
 
-        // Validar la conversión numérica
-        if (calorias == null || proteinas == null || carbohidratos == null || grasas == null) {
-            Toast.makeText(this, "Por favor, ingresa valores numéricos válidos", Toast.LENGTH_SHORT).show()
-            return
+        alimentoRepository.crearAlimentoPersonalizado(request) { alimento ->
+            if (alimento != null) {
+                Toast.makeText(this, "Alimento registrado con éxito", Toast.LENGTH_LONG).show()
+                limpiarCampos()
+                finish()
+            } else {
+                Toast.makeText(this, "Error al registrar alimento", Toast.LENGTH_SHORT).show()
+            }
         }
-
-        val incluyeDesayuno = swDesayuno.isChecked
-        val incluyeAlmuerzo = swAlmuerzo.isChecked
-        val incluyeCena = swCena.isChecked
-
-        // Mostrar la información registrada
-        val mensaje = """
-        Alimento registrado:
-        Nombre: $nombre
-        Calorías: $calorias g/porción
-        Proteínas: $proteinas g/porción
-        Carbohidratos: $carbohidratos g/porción
-        Grasas: $grasas g/porción
-        Incluir en desayuno: $incluyeDesayuno
-        Incluir en almuerzo: $incluyeAlmuerzo
-        Incluir en cena: $incluyeCena
-    """.trimIndent()
-
-        Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show()
-        limpiarCampos()
     }
 
     private fun limpiarCampos() {

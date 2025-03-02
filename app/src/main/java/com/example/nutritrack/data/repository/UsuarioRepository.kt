@@ -68,4 +68,23 @@ class UsuarioRepository {
             }
         })
     }
+
+    fun getProfile(callback: (Usuario?) -> Unit) {
+        usuarioApi.verificarToken().enqueue(object : Callback<LoginResponse> {
+            override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "Token válido")
+                    callback(response.body()?.data?.usuario)
+                } else {
+                    Log.e(TAG, "Token inválido: Código ${response.code()}")
+                    callback(null) // El token no es válido
+                }
+            }
+
+            override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                Log.e(TAG, "Error al verificar token: ${t.message}", t)
+                callback(null) // Error de red o servidor
+            }
+        })
+    }
 }

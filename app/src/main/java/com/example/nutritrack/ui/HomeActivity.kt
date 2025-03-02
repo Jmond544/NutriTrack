@@ -12,9 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.nutritrack.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Calendar
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : BaseActivity() {
 
     private lateinit var viewPagerWeeks: ViewPager2
     private lateinit var weekPagerAdapter: WeekPagerAdapter
@@ -25,10 +26,18 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var buttonCena: Button
     private var selectedDate: CalendarItem? = null
 
+    override fun getLayoutResourceId(): Int {
+        return R.layout.activity_home
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setSelectedNavItem(R.id.nav_home) // o R.id.nav_profile dependiendo de la actividad
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
-
+        setSelectedNavItem(R.id.nav_home)
         viewPagerWeeks = findViewById(R.id.viewPagerWeeks)
         textSelectedDate = findViewById(R.id.textSelectedDate)
         textMonthYear = findViewById(R.id.textMonthYear)
