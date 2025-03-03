@@ -48,6 +48,18 @@
                 android:overScrollMode="never"
                 android:layout_marginBottom="16dp"/>
 
+            <TextView
+                android:id="@+id/textCaloriasTotales"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:text="0 / 0 kcal"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"
+                android:padding="8dp"
+                android:layout_gravity="center_horizontal"/>
+
             <!-- Card Desayuno -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardDesayuno"

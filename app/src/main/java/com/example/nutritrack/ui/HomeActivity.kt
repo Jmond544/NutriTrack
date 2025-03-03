@@ -6,17 +6,12 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.nutritrack.R
+import com.example.nutritrack.data.model.ComidaConDetalles
 import com.example.nutritrack.data.repository.ComidaRepository
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.util.Calendar
 
 class HomeActivity : BaseActivity() {
 
@@ -37,6 +32,9 @@ class HomeActivity : BaseActivity() {
     private lateinit var recyclerDesayuno: RecyclerView
     private lateinit var recyclerAlmuerzo: RecyclerView
     private lateinit var recyclerCena: RecyclerView
+
+    private lateinit var textCaloriasTotales: TextView
+    private var caloriasObjetivo: Int = 0
 
     override fun getLayoutResourceId(): Int {
         return R.layout.activity_home
@@ -61,10 +59,12 @@ class HomeActivity : BaseActivity() {
         recyclerDesayuno = findViewById(R.id.recyclerDesayuno)
         recyclerAlmuerzo = findViewById(R.id.recyclerAlmuerzo)
         recyclerCena = findViewById(R.id.recyclerCena)
+        textCaloriasTotales = findViewById(R.id.textCaloriasTotales)
 
         recyclerDesayuno.layoutManager = LinearLayoutManager(this)
         recyclerAlmuerzo.layoutManager = LinearLayoutManager(this)
         recyclerCena.layoutManager = LinearLayoutManager(this)
+
 
         repository = ComidaRepository()
         cargarComidas()
@@ -139,14 +139,37 @@ class HomeActivity : BaseActivity() {
                     recyclerDesayuno.visibility = if (desayuno.isNotEmpty()) View.VISIBLE else View.GONE
                     recyclerAlmuerzo.visibility = if (almuerzo.isNotEmpty()) View.VISIBLE else View.GONE
                     recyclerCena.visibility = if (cena.isNotEmpty()) View.VISIBLE else View.GONE
+
+                    // Calcular calorías totales
+                    val caloriasTotales = calcularCaloriasTotales(comidasFecha)
+
+                    if (comidasFecha.isNotEmpty() && comidasFecha[0].Usuarios.isNotEmpty()) {
+                        caloriasObjetivo = comidasFecha[0].Usuarios[0].objetivo_calorico
+                    }
+                    textCaloriasTotales.text = "$caloriasTotales / $caloriasObjetivo kcal"
                 } else {
                     Log.e("HomeActivity", "No se recibieron comidas")
                     recyclerDesayuno.visibility = View.GONE
                     recyclerAlmuerzo.visibility = View.GONE
                     recyclerCena.visibility = View.GONE
+                    textCaloriasTotales.text = "Selecciona un día ppara comenzar"
                 }
             }
         } ?: Log.e("HomeActivity", "Fecha seleccionada es nula")
     }
 
+    fun calcularCaloriasTotales(comidas: List<ComidaConDetalles>): Double {
+        var totalCalorias = 0.0
+
+        comidas.forEach { comida ->
+            comida.DetalleComidas.forEach { detalle ->
+                val cantidad = detalle.cantidad.toDouble()
+                val alimento = detalle.Alimento
+
+                totalCalorias += (cantidad * alimento.caloriasPorPorcion) / 100
+            }
+        }
+
+        return totalCalorias
+    }
 }
